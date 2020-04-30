@@ -36,13 +36,11 @@ class App {
     }
 	
 	private mongoDbSetup() {
-		mongoose.Promise = global.Promise;
-		mongoose.connect(config.db.uri, setting, (err, db) => {
-			if (err) {
-				console.log("Connect to database is failed! ", err);
-			}
-			console.log("Connect to database succed! ", db.name);
-		});
+		mongoose.connect(config.db.uri, setting)
+			.then(() => console.log("Connect to db succed!"))
+			.catch(err => console.log("Connect to db failed!", err));
+			
+		mongoose.connection.on("error", err => console.log("Database connection error: ${err.message}"));
 	}
 }
 
